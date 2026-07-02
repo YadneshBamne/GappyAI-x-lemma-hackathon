@@ -1,0 +1,6 @@
+{
+  "connector_id": "linear",
+  "auth_scheme": "OAUTH2",
+  "description": "Linear integration for bug tracking and engineering issues.",
+  "status": "MANUAL_OAUTH_REQUIRED"
+}

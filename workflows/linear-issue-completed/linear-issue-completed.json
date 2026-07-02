@@ -1,0 +1,178 @@
+{
+  "name": "linear-issue-completed",
+  "description": "Triggered when a Linear issue is closed. Handles release drafting, documentation flags, and announcements.",
+  "start": {
+    "type": "EVENT",
+    "config": {
+      "connector_id": "linear",
+      "connector_trigger_id": "linear:composio:linear_issue_updated_trigger",
+      "trigger_config": {
+        "team_id": "6a0d4290-85a7-45f3-995d-c9a0b7c78083"
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "eng_agent",
+      "type": "AGENT",
+      "label": "Engineering Scan",
+      "config": {
+        "agent_name": "engineering-agent",
+        "input_mapping": {
+          "issue_id": {
+            "type": "expression",
+            "value": "start.payload.data.id"
+          },
+          "issue_title": {
+            "type": "expression",
+            "value": "start.payload.data.title"
+          },
+          "action": {
+            "type": "expression",
+            "value": "start.payload.action"
+          }
+        }
+      }
+    },
+    {
+      "id": "doc_agent",
+      "type": "AGENT",
+      "label": "Verify & Update Docs",
+      "config": {
+        "agent_name": "documentation-agent"
+      }
+    },
+    {
+      "id": "knowledge_agent",
+      "type": "AGENT",
+      "label": "Sync Knowledge Base",
+      "config": {
+        "agent_name": "knowledge-agent"
+      }
+    },
+    {
+      "id": "release_agent",
+      "type": "AGENT",
+      "label": "Draft Release Notes",
+      "config": {
+        "agent_name": "release-agent"
+      }
+    },
+    {
+      "id": "marketing_agent",
+      "type": "AGENT",
+      "label": "Draft Announcements",
+      "config": {
+        "agent_name": "marketing-agent"
+      }
+    },
+    {
+      "id": "founder_approval",
+      "type": "FORM",
+      "label": "Founder Publish Approval",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "publish": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "publish_notes",
+      "type": "FUNCTION",
+      "label": "Publish Release Notes",
+      "config": {
+        "function_name": "publish-notes-placeholder",
+        "input_mapping": {
+          "content": {
+            "type": "expression",
+            "value": "release_agent.output"
+          }
+        }
+      }
+    },
+    {
+      "id": "discord_announcement",
+      "type": "FUNCTION",
+      "label": "Discord Announcement",
+      "config": {
+        "function_name": "discord-post-placeholder",
+        "input_mapping": {
+          "channel": {
+            "type": "literal",
+            "value": "https://discord.com/api/webhooks/1256192237890732104/placeholder_webhook"
+          },
+          "message": {
+            "type": "expression",
+            "value": "marketing_agent.output"
+          }
+        }
+      }
+    },
+    {
+      "id": "update_analytics",
+      "type": "AGENT",
+      "label": "Update Analytics",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e2",
+      "source": "eng_agent",
+      "target": "doc_agent"
+    },
+    {
+      "id": "e3",
+      "source": "doc_agent",
+      "target": "knowledge_agent"
+    },
+    {
+      "id": "e4",
+      "source": "knowledge_agent",
+      "target": "release_agent"
+    },
+    {
+      "id": "e5",
+      "source": "release_agent",
+      "target": "marketing_agent"
+    },
+    {
+      "id": "e6",
+      "source": "marketing_agent",
+      "target": "founder_approval"
+    },
+    {
+      "id": "e7",
+      "source": "founder_approval",
+      "target": "publish_notes"
+    },
+    {
+      "id": "e8",
+      "source": "publish_notes",
+      "target": "discord_announcement"
+    },
+    {
+      "id": "e9",
+      "source": "discord_announcement",
+      "target": "update_analytics"
+    },
+    {
+      "id": "e10",
+      "source": "update_analytics",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

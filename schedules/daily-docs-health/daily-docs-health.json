@@ -1,0 +1,10 @@
+{
+  "name": "daily-docs-health",
+  "schedule_type": "TIME",
+  "config": {
+    "cron": "0 10 * * *"
+  },
+  "workflow_name": "documentation-update",
+  "is_active": false,
+  "visibility": "POD"
+}

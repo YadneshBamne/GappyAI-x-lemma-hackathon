@@ -1,0 +1,32 @@
+{
+  "name": "releases",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "project_id",
+      "type": "UUID",
+      "required": true,
+      "foreign_key": {
+        "references": "projects.id"
+      }
+    },
+    {
+      "name": "version_tag",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 50
+    },
+    {
+      "name": "release_notes_markdown",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "released_at",
+      "type": "DATETIME",
+      "required": false
+    }
+  ]
+}

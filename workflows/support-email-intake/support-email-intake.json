@@ -1,0 +1,182 @@
+{
+  "name": "support-email-intake",
+  "description": "Triage customer emails from Gmail, resolve known questions, and escalate bugs to engineering.",
+  "start": {
+    "type": "EVENT",
+    "config": {
+      "connector_id": "gmail",
+      "connector_trigger_id": "gmail:composio:gmail_new_gmail_message",
+      "trigger_config": {
+        "userId": "me",
+        "interval": 1
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "support_agent",
+      "type": "AGENT",
+      "label": "Support Agent Triage",
+      "config": {
+        "agent_name": "support-agent",
+        "input_mapping": {
+          "user_message": {
+            "type": "expression",
+            "value": "start.payload.message_text"
+          },
+          "sender": {
+            "type": "expression",
+            "value": "start.payload.sender"
+          },
+          "subject": {
+            "type": "expression",
+            "value": "start.payload.subject"
+          }
+        }
+      }
+    },
+    {
+      "id": "knowledge_agent",
+      "type": "AGENT",
+      "label": "Knowledge Agent Lookup",
+      "config": {
+        "agent_name": "knowledge-agent"
+      }
+    },
+    {
+      "id": "is_known_answer",
+      "type": "DECISION",
+      "label": "Known Answer?",
+      "config": {
+        "expression": "knowledge_agent.has_answer == true"
+      }
+    },
+    {
+      "id": "draft_email",
+      "type": "AGENT",
+      "label": "Draft Response",
+      "config": {
+        "agent_name": "support-agent"
+      }
+    },
+    {
+      "id": "send_email",
+      "type": "FUNCTION",
+      "label": "Send Email",
+      "config": {
+        "function_name": "send-email-placeholder",
+        "input_mapping": {
+          "to_address": {
+            "type": "expression",
+            "value": "start.payload.sender"
+          },
+          "subject": {
+            "type": "expression",
+            "value": "start.payload.subject"
+          },
+          "body": {
+            "type": "expression",
+            "value": "draft_email.output"
+          }
+        }
+      }
+    },
+    {
+      "id": "eng_agent",
+      "type": "AGENT",
+      "label": "Engineering Escalation",
+      "config": {
+        "agent_name": "engineering-agent"
+      }
+    },
+    {
+      "id": "create_linear_ticket",
+      "type": "FUNCTION",
+      "label": "Linear Issue Log",
+      "config": {
+        "function_name": "create-linear-issue-placeholder",
+        "input_mapping": {
+          "title": {
+            "type": "expression",
+            "value": "support_agent.output"
+          },
+          "description": {
+            "type": "expression",
+            "value": "start.payload.message_text"
+          },
+          "priority": {
+            "type": "literal",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    {
+      "id": "update_dashboard_status",
+      "type": "AGENT",
+      "label": "Update Dashboard",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e2",
+      "source": "support_agent",
+      "target": "knowledge_agent"
+    },
+    {
+      "id": "e3",
+      "source": "knowledge_agent",
+      "target": "is_known_answer"
+    },
+    {
+      "id": "e4_true",
+      "source": "is_known_answer",
+      "target": "draft_email",
+      "config": {
+        "outcome": "true"
+      }
+    },
+    {
+      "id": "e5_true",
+      "source": "draft_email",
+      "target": "send_email"
+    },
+    {
+      "id": "e6_true",
+      "source": "send_email",
+      "target": "end"
+    },
+    {
+      "id": "e4_false",
+      "source": "is_known_answer",
+      "target": "eng_agent",
+      "config": {
+        "outcome": "false"
+      }
+    },
+    {
+      "id": "e5_false",
+      "source": "eng_agent",
+      "target": "create_linear_ticket"
+    },
+    {
+      "id": "e6_false",
+      "source": "create_linear_ticket",
+      "target": "update_dashboard_status"
+    },
+    {
+      "id": "e7_false",
+      "source": "update_dashboard_status",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

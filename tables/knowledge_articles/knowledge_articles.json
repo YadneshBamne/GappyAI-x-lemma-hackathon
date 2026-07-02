@@ -1,0 +1,30 @@
+{
+  "name": "knowledge_articles",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "title",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "content_markdown",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "keywords",
+      "type": "TEXT",
+      "required": false,
+      "max_length": 500
+    },
+    {
+      "name": "last_synced_at",
+      "type": "DATETIME",
+      "required": false
+    }
+  ]
+}

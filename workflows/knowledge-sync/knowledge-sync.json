@@ -1,0 +1,43 @@
+{
+  "name": "knowledge-sync",
+  "description": "Syncs external data sources (like Confluence or files) into the RAG knowledge article vector table.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "knowledge_agent",
+      "type": "AGENT",
+      "label": "Trigger Ingestion",
+      "config": {
+        "agent_name": "knowledge-agent"
+      }
+    },
+    {
+      "id": "sync_articles",
+      "type": "FUNCTION",
+      "label": "Sync Confluence / Files",
+      "config": {
+        "function_name": "confluence-sync-placeholder"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "knowledge_agent",
+      "target": "sync_articles"
+    },
+    {
+      "id": "e2",
+      "source": "sync_articles",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

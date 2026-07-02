@@ -1,0 +1,6 @@
+{
+  "connector_id": "confluence",
+  "auth_scheme": "OAUTH2",
+  "description": "Confluence integration for synchronizing wiki documentation.",
+  "status": "MANUAL_OAUTH_REQUIRED"
+}

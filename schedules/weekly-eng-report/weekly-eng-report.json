@@ -1,0 +1,10 @@
+{
+  "name": "weekly-eng-report",
+  "schedule_type": "TIME",
+  "config": {
+    "cron": "0 17 * * 5"
+  },
+  "workflow_name": "weekly-company-report",
+  "is_active": false,
+  "visibility": "POD"
+}

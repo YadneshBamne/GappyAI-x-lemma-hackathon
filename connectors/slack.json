@@ -1,0 +1,6 @@
+{
+  "connector_id": "slack",
+  "auth_scheme": "OAUTH2",
+  "description": "Slack integration for internal operations and announcements.",
+  "status": "MANUAL_OAUTH_REQUIRED"
+}

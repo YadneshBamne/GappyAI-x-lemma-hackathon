@@ -1,0 +1,197 @@
+{
+  "name": "discord-bug-intake",
+  "description": "Triages Discord messages for bug reports, answers known bugs, and escalates new ones to Linear.",
+  "start": {
+    "type": "EVENT",
+    "config": {
+      "connector_id": "discord",
+      "connector_trigger_id": "discord:composio:discord_new_message_trigger",
+      "trigger_config": {
+        "channel_id": "1522084255059017871",
+        "interval": 1
+      }
+    }
+  },
+  "nodes": [
+    {
+      "id": "community_agent",
+      "type": "AGENT",
+      "label": "Community Agent",
+      "config": {
+        "agent_name": "community-agent",
+        "input_mapping": {
+          "user_message": {
+            "type": "expression",
+            "value": "start.payload.message.content"
+          },
+          "user_name": {
+            "type": "expression",
+            "value": "start.payload.message.username"
+          }
+        }
+      }
+    },
+    {
+      "id": "knowledge_agent",
+      "type": "AGENT",
+      "label": "Knowledge Agent Check",
+      "config": {
+        "agent_name": "knowledge-agent"
+      }
+    },
+    {
+      "id": "is_known_bug",
+      "type": "DECISION",
+      "label": "Known Bug?",
+      "config": {
+        "expression": "knowledge_agent.has_answer == true"
+      }
+    },
+    {
+      "id": "auto_reply",
+      "type": "AGENT",
+      "label": "Send Auto Reply",
+      "config": {
+        "agent_name": "community-agent"
+      }
+    },
+    {
+      "id": "update_analytics_known",
+      "type": "AGENT",
+      "label": "Update Analytics",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "eng_agent",
+      "type": "AGENT",
+      "label": "Engineering Agent Triage",
+      "config": {
+        "agent_name": "engineering-agent"
+      }
+    },
+    {
+      "id": "create_linear",
+      "type": "FUNCTION",
+      "label": "Create Linear Issue",
+      "config": {
+        "function_name": "create-linear-issue-placeholder",
+        "input_mapping": {
+          "title": {
+            "type": "expression",
+            "value": "community_agent.output"
+          },
+          "description": {
+            "type": "expression",
+            "value": "start.payload.message.content"
+          },
+          "priority": {
+            "type": "literal",
+            "value": "High"
+          }
+        }
+      }
+    },
+    {
+      "id": "doc_agent",
+      "type": "AGENT",
+      "label": "Mark Docs Missing",
+      "config": {
+        "agent_name": "documentation-agent"
+      }
+    },
+    {
+      "id": "founder_approval",
+      "type": "FORM",
+      "label": "Founder Approval Required",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "approved": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_dashboard",
+      "type": "AGENT",
+      "label": "Update Dashboard Status",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e2",
+      "source": "community_agent",
+      "target": "knowledge_agent"
+    },
+    {
+      "id": "e3",
+      "source": "knowledge_agent",
+      "target": "is_known_bug"
+    },
+    {
+      "id": "e4_true",
+      "source": "is_known_bug",
+      "target": "auto_reply",
+      "config": {
+        "outcome": "true"
+      }
+    },
+    {
+      "id": "e5_true",
+      "source": "auto_reply",
+      "target": "update_analytics_known"
+    },
+    {
+      "id": "e6_true",
+      "source": "update_analytics_known",
+      "target": "end"
+    },
+    {
+      "id": "e4_false",
+      "source": "is_known_bug",
+      "target": "eng_agent",
+      "config": {
+        "outcome": "false"
+      }
+    },
+    {
+      "id": "e5_false",
+      "source": "eng_agent",
+      "target": "create_linear"
+    },
+    {
+      "id": "e6_false",
+      "source": "create_linear",
+      "target": "doc_agent"
+    },
+    {
+      "id": "e7_false",
+      "source": "doc_agent",
+      "target": "founder_approval"
+    },
+    {
+      "id": "e8_false",
+      "source": "founder_approval",
+      "target": "update_dashboard"
+    },
+    {
+      "id": "e9_false",
+      "source": "update_dashboard",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

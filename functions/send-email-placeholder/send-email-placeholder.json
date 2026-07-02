@@ -1,0 +1,29 @@
+{
+  "name": "send-email-placeholder",
+  "description": "Sends support or outreach emails via Gmail.",
+  "type": "API",
+  "visibility": "POD",
+  "code": {
+    "$file": "code.py"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "datastore_table",
+        "resource_name": "support_tickets",
+        "permission_ids": [
+          "datastore.table.read",
+          "datastore.record.read",
+          "datastore.record.write"
+        ]
+      },
+      {
+        "resource_type": "connector",
+        "resource_name": "gmail",
+        "permission_ids": [
+          "connector.use"
+        ]
+      }
+    ]
+  }
+}

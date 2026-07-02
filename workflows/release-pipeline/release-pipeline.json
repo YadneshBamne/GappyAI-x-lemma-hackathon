@@ -1,0 +1,70 @@
+{
+  "name": "release-pipeline",
+  "description": "Monthly or manual product deployment pipeline, consolidating release information.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "intake",
+      "type": "FORM",
+      "label": "Start Release",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "release_agent",
+      "type": "AGENT",
+      "label": "Compile Changelog",
+      "config": {
+        "agent_name": "release-agent"
+      }
+    },
+    {
+      "id": "founder_signoff",
+      "type": "FORM",
+      "label": "Founder Release Sign-off",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "signoff": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "intake",
+      "target": "release_agent"
+    },
+    {
+      "id": "e2",
+      "source": "release_agent",
+      "target": "founder_signoff"
+    },
+    {
+      "id": "e3",
+      "source": "founder_signoff",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

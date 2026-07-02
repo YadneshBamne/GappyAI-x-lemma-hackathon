@@ -1,0 +1,10 @@
+{
+  "name": "monthly-release-summary",
+  "schedule_type": "TIME",
+  "config": {
+    "cron": "0 9 1 * *"
+  },
+  "workflow_name": "release-pipeline",
+  "is_active": false,
+  "visibility": "POD"
+}

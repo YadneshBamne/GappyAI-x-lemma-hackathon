@@ -1,0 +1,43 @@
+{
+  "name": "weekly-company-report",
+  "description": "Weekly report compilation detailing health metrics and progress across all teams.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "orchestrator",
+      "type": "AGENT",
+      "label": "Aggregate Department Summaries",
+      "config": {
+        "agent_name": "company-orchestrator"
+      }
+    },
+    {
+      "id": "analytics_agent",
+      "type": "AGENT",
+      "label": "Compute Weekly KPI Trends",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "orchestrator",
+      "target": "analytics_agent"
+    },
+    {
+      "id": "e2",
+      "source": "analytics_agent",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

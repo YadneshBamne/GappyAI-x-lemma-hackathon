@@ -1,0 +1,86 @@
+{
+  "name": "feature-request-pipeline",
+  "description": "Processes community and customer suggestions into product roadmap specs.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "intake",
+      "type": "FORM",
+      "label": "Feature Suggestion",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "product_agent",
+      "type": "AGENT",
+      "label": "Product Agent Analysis",
+      "config": {
+        "agent_name": "product-agent"
+      }
+    },
+    {
+      "id": "founder_review",
+      "type": "FORM",
+      "label": "Founder Roadmap Approval",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "approve_to_roadmap": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_roadmap",
+      "type": "AGENT",
+      "label": "Update Roadmap",
+      "config": {
+        "agent_name": "product-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "intake",
+      "target": "product_agent"
+    },
+    {
+      "id": "e2",
+      "source": "product_agent",
+      "target": "founder_review"
+    },
+    {
+      "id": "e3",
+      "source": "founder_review",
+      "target": "update_roadmap"
+    },
+    {
+      "id": "e4",
+      "source": "update_roadmap",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

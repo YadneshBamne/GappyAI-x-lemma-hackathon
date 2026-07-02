@@ -1,0 +1,28 @@
+{
+  "name": "departments",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "company_id",
+      "type": "UUID",
+      "required": true,
+      "foreign_key": {
+        "references": "companies.id"
+      }
+    },
+    {
+      "name": "name",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "head_agent_name",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    }
+  ]
+}

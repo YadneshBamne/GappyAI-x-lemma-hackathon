@@ -1,0 +1,10 @@
+{
+  "name": "daily-ai-standup",
+  "schedule_type": "TIME",
+  "config": {
+    "cron": "0 9 * * *"
+  },
+  "workflow_name": "daily-ai-standup",
+  "is_active": false,
+  "visibility": "POD"
+}

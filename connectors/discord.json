@@ -1,0 +1,6 @@
+{
+  "connector_id": "discord",
+  "auth_scheme": "OAUTH2",
+  "description": "Discord integration for developer community intake.",
+  "status": "MANUAL_OAUTH_REQUIRED"
+}

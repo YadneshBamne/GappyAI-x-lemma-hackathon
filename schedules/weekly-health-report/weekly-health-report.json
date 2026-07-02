@@ -1,0 +1,10 @@
+{
+  "name": "weekly-health-report",
+  "schedule_type": "TIME",
+  "config": {
+    "cron": "0 9 * * 1"
+  },
+  "workflow_name": "weekly-company-report",
+  "is_active": false,
+  "visibility": "POD"
+}

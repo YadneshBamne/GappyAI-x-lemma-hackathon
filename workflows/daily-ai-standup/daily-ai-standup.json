@@ -1,0 +1,108 @@
+{
+  "name": "daily-ai-standup",
+  "description": "Daily scheduled standup polling all agents for their logs and status, displaying it on the dashboard.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "orchestrator",
+      "type": "AGENT",
+      "label": "Collect Agent Activities",
+      "config": {
+        "agent_name": "company-orchestrator"
+      }
+    },
+    {
+      "id": "eng_status",
+      "type": "AGENT",
+      "label": "Get Engineering Status",
+      "config": {
+        "agent_name": "engineering-agent"
+      }
+    },
+    {
+      "id": "comm_status",
+      "type": "AGENT",
+      "label": "Get Community Status",
+      "config": {
+        "agent_name": "community-agent"
+      }
+    },
+    {
+      "id": "support_status",
+      "type": "AGENT",
+      "label": "Get Support Status",
+      "config": {
+        "agent_name": "support-agent"
+      }
+    },
+    {
+      "id": "doc_status",
+      "type": "AGENT",
+      "label": "Get Docs Status",
+      "config": {
+        "agent_name": "documentation-agent"
+      }
+    },
+    {
+      "id": "release_status",
+      "type": "AGENT",
+      "label": "Get Release Status",
+      "config": {
+        "agent_name": "release-agent"
+      }
+    },
+    {
+      "id": "analytics_status",
+      "type": "AGENT",
+      "label": "Compile Standup Log",
+      "config": {
+        "agent_name": "analytics-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "orchestrator",
+      "target": "eng_status"
+    },
+    {
+      "id": "e2",
+      "source": "eng_status",
+      "target": "comm_status"
+    },
+    {
+      "id": "e3",
+      "source": "comm_status",
+      "target": "support_status"
+    },
+    {
+      "id": "e4",
+      "source": "support_status",
+      "target": "doc_status"
+    },
+    {
+      "id": "e5",
+      "source": "doc_status",
+      "target": "release_status"
+    },
+    {
+      "id": "e6",
+      "source": "release_status",
+      "target": "analytics_status"
+    },
+    {
+      "id": "e7",
+      "source": "analytics_status",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

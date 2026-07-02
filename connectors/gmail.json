@@ -1,0 +1,6 @@
+{
+  "connector_id": "gmail",
+  "auth_scheme": "OAUTH2",
+  "description": "Gmail integration for customer support ticketry.",
+  "status": "MANUAL_OAUTH_REQUIRED"
+}

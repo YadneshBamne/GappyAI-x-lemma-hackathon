@@ -1,0 +1,56 @@
+{
+  "name": "support_tickets",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "customer_email",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "subject",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "description",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "priority",
+      "type": "ENUM",
+      "required": true,
+      "default": "medium",
+      "options": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ]
+    },
+    {
+      "name": "status",
+      "type": "ENUM",
+      "required": true,
+      "default": "new",
+      "options": [
+        "new",
+        "open",
+        "pending",
+        "solved",
+        "closed"
+      ]
+    },
+    {
+      "name": "assigned_agent_name",
+      "type": "TEXT",
+      "required": false,
+      "max_length": 255
+    }
+  ]
+}

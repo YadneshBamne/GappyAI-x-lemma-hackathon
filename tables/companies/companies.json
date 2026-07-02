@@ -1,0 +1,20 @@
+{
+  "name": "companies",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "name",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "domain",
+      "type": "TEXT",
+      "required": false,
+      "max_length": 255
+    }
+  ]
+}

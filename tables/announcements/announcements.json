@@ -1,0 +1,41 @@
+{
+  "name": "announcements",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "channel",
+      "type": "ENUM",
+      "required": true,
+      "options": [
+        "slack",
+        "discord",
+        "email",
+        "all"
+      ]
+    },
+    {
+      "name": "title",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "content_text",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "approval_status",
+      "type": "ENUM",
+      "required": true,
+      "default": "pending",
+      "options": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    }
+  ]
+}

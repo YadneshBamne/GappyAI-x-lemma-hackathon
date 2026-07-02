@@ -1,0 +1,63 @@
+{
+  "name": "documentation-update",
+  "description": "Processes manual updates to files and runs documentation quality health checks.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "doc_agent",
+      "type": "AGENT",
+      "label": "Analyze Docs Coverage",
+      "config": {
+        "agent_name": "documentation-agent"
+      }
+    },
+    {
+      "id": "founder_approval",
+      "type": "FORM",
+      "label": "Founder Review Doc Updates",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "publish": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "sync_knowledge",
+      "type": "AGENT",
+      "label": "Sync RAG Index",
+      "config": {
+        "agent_name": "knowledge-agent"
+      }
+    },
+    {
+      "id": "end",
+      "type": "END",
+      "label": "Done"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "doc_agent",
+      "target": "founder_approval"
+    },
+    {
+      "id": "e2",
+      "source": "founder_approval",
+      "target": "sync_knowledge"
+    },
+    {
+      "id": "e3",
+      "source": "sync_knowledge",
+      "target": "end"
+    }
+  ],
+  "visibility": "POD"
+}

@@ -1,0 +1,39 @@
+{
+  "name": "agent_runs",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "agent_name",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "status",
+      "type": "ENUM",
+      "required": true,
+      "options": [
+        "running",
+        "completed",
+        "failed"
+      ]
+    },
+    {
+      "name": "run_details",
+      "type": "TEXT",
+      "required": false
+    },
+    {
+      "name": "started_at",
+      "type": "DATETIME",
+      "required": true
+    },
+    {
+      "name": "completed_at",
+      "type": "DATETIME",
+      "required": false
+    }
+  ]
+}

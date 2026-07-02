@@ -1,0 +1,24 @@
+{
+  "name": "analytics",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "metric_name",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "metric_value",
+      "type": "FLOAT",
+      "required": true
+    },
+    {
+      "name": "recorded_date",
+      "type": "DATE",
+      "required": true
+    }
+  ]
+}

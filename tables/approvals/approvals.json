@@ -1,0 +1,47 @@
+{
+  "name": "approvals",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "visibility": "POD",
+  "columns": [
+    {
+      "name": "resource_type",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 100
+    },
+    {
+      "name": "resource_id",
+      "type": "UUID",
+      "required": true
+    },
+    {
+      "name": "request_details",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "approval_status",
+      "type": "ENUM",
+      "required": true,
+      "default": "pending",
+      "options": [
+        "pending",
+        "approved",
+        "rejected"
+      ]
+    },
+    {
+      "name": "requested_by_agent",
+      "type": "TEXT",
+      "required": true,
+      "max_length": 255
+    },
+    {
+      "name": "reviewer_name",
+      "type": "TEXT",
+      "required": false,
+      "max_length": 255
+    }
+  ]
+}
